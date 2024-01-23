@@ -1,0 +1,19 @@
+.root {
+    width: 100%;
+    text-align: start;
+}
+
+.input {
+    padding: 0.6em 0.8em;
+    border: 1px solid #C7C7D3;
+    border-radius: 0.2em;
+
+    &:focus {
+        border: 1px solid #2A85FF;
+        outline: unset;
+        box-shadow: 0 0 6px #2A85FF;
+    }
+
+    width:100%;
+    margin:0em;
+}

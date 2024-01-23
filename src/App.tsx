@@ -1,59 +1,57 @@
 import { useState } from 'react';
-import classNames from 'classnames';
-import { ReactComponent as ReactLogo } from './assets/react.svg';
-import { ReactComponent as ViteLogo } from './assets/vite.svg';
-import { ReactComponent as TypescriptLogo } from './assets/typescript.svg';
-import { ReactComponent as ScssLogo } from './assets/scss.svg';
 import styles from './App.module.scss';
+import { Input } from './components/input/input';
+import { Label } from './components/label/label';
+import { SubmitButton } from './components/submit-button/submit-button';
+import { FormRow } from './components/form-row/form-row';
+import { RiSendPlaneFill } from 'react-icons/ri';
 
 function App() {
-    const [count, setCount] = useState(0);
+    function handleOnSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const formData: Record<string, string> = {};
+
+        function isInputNamedElement(e: Element): e is HTMLInputElement & { name: string } {
+            return 'value' in e && 'name' in e;
+        }
+
+        Array.from(e.currentTarget.elements)
+            .filter(isInputNamedElement)
+            .forEach((field) => {
+                if (!field.name) return;
+                formData[field.name] = field.value;
+            });
+        console.log('formData', formData);
+    }
 
     return (
         <div className={styles.App}>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <ViteLogo
-                        height="6em"
-                        width="6em"
-                        className={classNames(styles.logo)}
-                        title="Vite logo"
-                    />
-                </a>
-                <a href="https://reactjs.org" target="_blank">
-                    <ReactLogo
-                        height="6em"
-                        width="6em"
-                        className={classNames(styles.logo, styles.react)}
-                        title="React logo"
-                    />
-                </a>
-                <a href="https://www.typescriptlang.org/" target="_blank">
-                    <TypescriptLogo
-                        height="6em"
-                        width="6em"
-                        className={classNames(styles.logo, styles.ts)}
-                        title="Typescript logo"
-                    />
-                </a>
-                <a href="https://sass-lang.com/" target="_blank">
-                    <ScssLogo
-                        height="6em"
-                        width="6em"
-                        className={classNames(styles.logo, styles.scss)}
-                        title="SCSS logo"
-                    />
-                </a>
-            </div>
-            <div className={styles.card}>
-                <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className={styles['read-the-docs']}>
-                Click on the Vite and React logos to learn more
+            <h1 className={styles.title}>Contact Us</h1>
+            <p className={styles.description}>
+                Have a question? Fill out the form below and we&apos;ll get back to you as soon as
+                we can.
             </p>
+            <p className={styles.note}>All fields are required.</p>
+            <form onSubmit={handleOnSubmit} className={styles.form}>
+                <FormRow>
+                    <Label htmlFor={'name'}>Name</Label>
+                    <Input name={'name'} id={'name'} />
+                </FormRow>
+                <FormRow>
+                    <Label htmlFor={'email'}>Email</Label>
+                    <Input id={'email'} name={'email'} />
+                </FormRow>
+                <FormRow>
+                    <Label htmlFor={'message'}>Message</Label>
+                    <Input id={'message'} name={'message'} />
+                </FormRow>
+                <FormRow>
+                    <SubmitButton>
+                        <RiSendPlaneFill className={styles.iconSend} />
+                        Submit
+                    </SubmitButton>
+                </FormRow>
+            </form>
         </div>
     );
 }
